@@ -1,0 +1,31 @@
+Teams:
+- '&cRed'
+- '&eYellow'
+- '&bBlue'
+ 
+#How teams are displayed in the chat.
+Team Format: '&7[%TEAM%&7]'
+ 
+#Set to 0 to disable
+Leave Timeout: 15
+ 
+#Maximum amount of team joins. Set to 0 to disable.
+Max Team Joins: 5
+ 
+#Enable Team name in chat
+Enable Chat: true
+ 
+#Prefix used for plugin messages
+prefix: '&6[&aTeams&6]'
+ 
+#Prefix used for chat channels
+ChannelPrefix: '&6[&aTC&6]'
+ 
+#Message sent to player when they join a team
+Message_Team: '&aSuccessfully joined team: %TEAM_NAME%!'
+ 
+#Only enable teams in specific worlds.
+Enabled: true
+Disabled Worlds:
+- world_nether
+- world_end

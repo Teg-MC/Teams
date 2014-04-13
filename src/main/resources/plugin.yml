@@ -1,0 +1,22 @@
+name: Teams
+version: 2.0
+author: xTDKx
+main: me.xTDKx.Main.Main
+softpend: [CrackShot]
+description: >
+            Teams
+commands:
+    team:
+      description: Base command for all Team commands.
+    tc:
+      description: Command alias for team channel command.
+permissions:
+    teams.*:
+      description: Gives access to all Team commands.
+      children:
+        teams.add: true
+        teams.forceleave: true
+
+    teams.forceleave:
+          description: Admin commands for the Teams plugin.
+          default: op
