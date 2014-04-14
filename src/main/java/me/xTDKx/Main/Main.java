@@ -2,7 +2,6 @@ package me.xTDKx.Main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Arrow;
@@ -13,14 +12,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -212,9 +209,8 @@ public class Main extends JavaPlugin implements Listener {
 
         }
         if (getConfig().getBoolean("Enabled")) {
-            if (!(getConfig().getStringList("Disabled Worlds").contains(player.getWorld().getName()))){
+            if (!(getConfig().getStringList("Disabled Worlds").contains(player.getWorld().getName()))) {
                 if (channelOn.contains(player.getUniqueId().toString())) {
-                    channelOn.remove(player.getUniqueId().toString());
                     if (PlayerConfig.getPlayers().contains(player.getUniqueId().toString())) {
                         if (PlayerConfig.getPlayers().getString(player.getUniqueId().toString()) != null) {
                             if (event.getRecipients() != null) {
@@ -229,6 +225,7 @@ public class Main extends JavaPlugin implements Listener {
                                         }
                                     }
                                 }
+
                             }
                         } else {
                             channelOn.remove(player.getUniqueId().toString());
@@ -236,33 +233,35 @@ public class Main extends JavaPlugin implements Listener {
                     } else {
                         channelOn.remove(player.getUniqueId().toString());
                     }
-                }
-        }
-    }else{
-            if (channelOn.contains(player.getUniqueId().toString())) {
 
-                if (PlayerConfig.getPlayers().contains(player.getUniqueId().toString())) {
-                    if (PlayerConfig.getPlayers().getString(player.getUniqueId().toString()) != null) {
-                        if (event.getRecipients() != null) {
-                            String senderTeam = PlayerConfig.getPlayers().getString(player.getUniqueId().toString());
-                            event.setCancelled(true);
-                            for (Player p : event.getRecipients()) {
-                                if (PlayerConfig.getPlayers().contains(p.getUniqueId().toString())) {
-                                    if (PlayerConfig.getPlayers().getString(p.getUniqueId().toString()) != null) {
-                                        if (PlayerConfig.getPlayers().getString(p.getUniqueId().toString()).equalsIgnoreCase(senderTeam)) {
-                                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("ChannelPrefix") + " " + event.getFormat().replace("%1$s", player.getDisplayName()).replace("%2$s", event.getMessage())));
-                                        }
+                }
+            }else{
+                channelOn.remove(player.getUniqueId().toString());
+            }
+    }else {
+            if (channelOn.contains(player.getUniqueId().toString())) {
+            if (PlayerConfig.getPlayers().contains(player.getUniqueId().toString())) {
+                if (PlayerConfig.getPlayers().getString(player.getUniqueId().toString()) != null) {
+                    if (event.getRecipients() != null) {
+                        String senderTeam = PlayerConfig.getPlayers().getString(player.getUniqueId().toString());
+                        event.setCancelled(true);
+                        for (Player p : event.getRecipients()) {
+                            if (PlayerConfig.getPlayers().contains(p.getUniqueId().toString())) {
+                                if (PlayerConfig.getPlayers().getString(p.getUniqueId().toString()) != null) {
+                                    if (PlayerConfig.getPlayers().getString(p.getUniqueId().toString()).equalsIgnoreCase(senderTeam)) {
+                                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("ChannelPrefix") + " " + event.getFormat().replace("%1$s", player.getDisplayName()).replace("%2$s", event.getMessage())));
                                     }
                                 }
                             }
                         }
-                    } else {
-                        channelOn.remove(player.getUniqueId().toString());
                     }
                 } else {
                     channelOn.remove(player.getUniqueId().toString());
                 }
+            } else {
+                channelOn.remove(player.getUniqueId().toString());
             }
+        }
         }
 
     }
@@ -272,7 +271,6 @@ public class Main extends JavaPlugin implements Listener {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final String prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("prefix") + " ");
-        final int timeout = getConfig().getInt("Leave Timeout");
 
 
         if (commandLabel.equalsIgnoreCase("tc")) {
@@ -514,19 +512,19 @@ public class Main extends JavaPlugin implements Listener {
                                 PlayerConfig.getPlayers().set(player.getUniqueId().toString(), args[1]);
                                 PlayerConfig.savePlayers();
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                this.canLeave.add(player.getUniqueId().toString());
-                                if (getConfig().getInt("Leave timeout") != 0) {
-                                    this.taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+                                canLeave.add(player.getUniqueId().toString());
+                                if (getConfig().getInt("Leave Timeout") != 0) {
+                                    taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
                                     {
                                         public void run()
                                         {
-                                            if (Main.this.canLeave.contains(player.getUniqueId().toString()))
+                                            if (canLeave.contains(player.getUniqueId().toString()))
                                             {
-                                                Main.this.canLeave.remove(player.getUniqueId().toString());
+                                                canLeave.remove(player.getUniqueId().toString());
                                                 player.sendMessage(prefix + ChatColor.RED + "Your team has been picked, You can no longer /team leave!");
                                             }
                                         }
-                                    }, timeout * 20);
+                                    }, getConfig().getInt("Leave Timeout") * 20);
                                 }
                             }
                         }

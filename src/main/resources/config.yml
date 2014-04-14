@@ -8,10 +8,7 @@ Team Format: '&7[%TEAM%&7]'
  
 #Set to 0 to disable
 Leave Timeout: 15
- 
-#Maximum amount of team joins. Set to 0 to disable.
-Max Team Joins: 5
- 
+
 #Enable Team name in chat
 Enable Chat: true
  
